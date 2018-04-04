@@ -72,7 +72,7 @@ A Markdown file in which README information is to be placed.
 
 ## Versioning
 
-This repository uses [SemVer](http://sember.org) for versioning. For the versions available, see the [releases](releases)
+This repository uses [SemVer](http://semver.org) for versioning. For the versions available, see the [releases](releases)
 
 ## Authors
 
