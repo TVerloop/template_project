@@ -540,5 +540,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-
 # End of https://www.gitignore.io/api/c,svn,c++,ros,java,linux,latex,emacs,eclipse,windows,executable
+
+### Doxygen ###
+
+doc/html
+doc/latex
+
