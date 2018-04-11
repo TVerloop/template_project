@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}}
 
-Template project.
+Template project for embedded C/C++.
 
 ## Getting Started
 
@@ -16,6 +16,35 @@ Template project.
 
 * GNUMake.
 * An editor.
+* GCC compiler tool chain (arm-none-eabi)
+* Git
+* Doxygen
+
+## Building the project
+
+The project can be build just by calling make like this:
+
+```bash
+$ make 
+```
+
+### Overriding build type
+
+The project has two destinctive build types "DEBUG" and "RELEASE".
+Which to use is determined by the BUILD_TYPE variable in the makefile.
+This variable can be overriden by calling make like this:
+
+```bash
+$ make BUILD_TYPE=DEBUG
+```
+
+for debug, or
+
+```bash
+$ make BUILD_TYPE=RELEASE
+```
+
+for a release build.
 
 ## Installing
 
@@ -29,6 +58,8 @@ Template project.
 ``├── make/``  
 ``├─┬ doc/``  
 ``│ └─── Doxyfile``  
+``├─┬ link/``  
+``│ └─── stm32f030x4.ld``  
 ``├── include/``  
 ``├── src/``  
 ``├── LICENCE.md``  
@@ -52,7 +83,13 @@ The directory in which all documentation is supposed to be places.
 
 ### ``doc/Doxyfile`` File
 
-The Configuration file used by doxygen to generate source code documentation.
+### ``link/`` Directory
+
+The directory in which all linkerscripts supposed to be places.
+
+### ``link/stm32f030x4.ld`` File
+
+The linkerscript for the stm32f030x4 microcontroller.
 
 ### ``include/`` Directory
 
