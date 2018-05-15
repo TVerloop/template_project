@@ -7,7 +7,7 @@
  *
  *  @detail A GCC linkerscript for the stm323f030x4 cortex-m0 microcontrollers
  *
- */
+ **/
 
 SEARCH_DIR(.);
 
@@ -38,9 +38,9 @@ PROVIDE(__process_stack_size = __process_stack_size);
 
 MEMORY {
     /* Flash region. */
-    rom (rx) : org = 0x08000000, len = 16k
+    rom (rx) : org = 0x08000000, len = 64k
     /* Ram region. */
-    ram (rwx) : org = 0x20000000, len = 4k
+    ram (rwx) : org = 0x20000000, len = 20k
     /* Special zero sized region */
     nul (rwx) : org = 0x20000000, len = 0k
 }
