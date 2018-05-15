@@ -21,7 +21,7 @@ PROJECT_NAME = template_project
 # Linker scripts.
 #------------------------------------------------------------------------------#
 
-LD_SCRIPTS =  link/stm32f030x4.ld
+LD_SCRIPTS =  link/stm32f103x8.ld
 
 #------------------------------------------------------------------------------#
 # Object file directory.
@@ -63,20 +63,20 @@ SRCS_DIRS =  src
 # C++ Source files.
 #------------------------------------------------------------------------------#
 
-CXX_SRCS =  main.cpp
+CXX_SRCS =
 
 #------------------------------------------------------------------------------#
 # C Source files.
 #------------------------------------------------------------------------------#
 
-CC_SRCS =  vectors.c
-CC_SRCS += startup.c
+CC_SRCS =  main.c
+CC_SRCS += vectors.c
 
 #------------------------------------------------------------------------------#
 # Assembler source files.
 #------------------------------------------------------------------------------#
 
-AS_SRCS =
+AS_SRCS = startup.s
 
 #------------------------------------------------------------------------------#
 # Extention for C++ files.
@@ -94,7 +94,7 @@ CC_EXT  = c
 # Extention for Assembler files.
 #------------------------------------------------------------------------------#
 
-AS_EXT  = asm
+AS_EXT  = s
 
 #------------------------------------------------------------------------------#
 # Flags used by all compilers and linkers.
@@ -124,7 +124,7 @@ AS_FLAGS =
 # Defines shared between all sources.
 #------------------------------------------------------------------------------#
 
-CORE_DEFS =
+CORE_DEFS =  STM32F10xxx
 
 #------------------------------------------------------------------------------#
 # Defines for C++ sources.
@@ -175,7 +175,7 @@ USE_LTO = TRUE
 # CORTEX_M3: Build process will be optimized for cortex-m3 targets
 #------------------------------------------------------------------------------#
 
-PLATFORM = CORTEX_M0
+PLATFORM = CORTEX_M3
 
 #------------------------------------------------------------------------------#
 # Build type.
@@ -313,9 +313,9 @@ CC_FLAGS_F  += -std=$(CC_STD)
 
 # Predefine all specified macros.
 # https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html#index-D
-CXX_FLAGS_F += $(pathsubst %, -D%, $(CORE_DEFS) $(CXX_DEFS))
-CC_FLAGS_F  += $(pathsubst %, -D%, $(CORE_DEFS) $(CC_DEFS))
-AS_FLAGS_F  += $(pathsubst %, -D%, $(CORE_DEFS) $(AS_DEFS))
+CXX_FLAGS_F += $(patsubst %, -D%, $(CORE_DEFS) $(CXX_DEFS))
+CC_FLAGS_F  += $(patsubst %, -D%, $(CORE_DEFS) $(CC_DEFS))
+AS_FLAGS_F  += $(patsubst %, -D%, $(CORE_DEFS) $(AS_DEFS))
 
 # output a rule suitable for make describing the dependencies of the main
 # source file.
@@ -363,6 +363,8 @@ LD_FLAGS_F += $(patsubst %, -T%, $(LD_SCRIPTS))
 
 ifeq ($(PLATFORM), CORTEX_M0)
 
+CORE_DEFS += CORTEX_M0
+
 # This option specifies the name of the target ARM processor for which GCC
 # should tune the performance of the code.
 # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-mtune-3
@@ -386,6 +388,8 @@ endif
 #------------------------------------------------------------------------------#
 
 ifeq ($(PLATFORM), CORTEX_M3)
+
+CORE_DEFS += CORTEX_M3
 
 # This option specifies the name of the target ARM processor for which GCC
 # should tune the performance of the code.

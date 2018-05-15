@@ -1,158 +1,625 @@
-//
-//
-//
-//
-//
-//
-//
-/// @file vectors.c
-/// @author T. Verloop <t93.verloop@gmail.com>
-/// @version 0.1
-/// @date 04-04-2018
-/// @brief Interrupt vector table.
-///
-/// @detail Contains a default definition for every interrupt. Theses defaults
-/// Can be overwritten by any other definition as these are all weak linked.
-///
+/* -*- mode: c -*- */
+/**
+   @file vectors.c
+   @author T. Verloop <t93.verloop@gmail.com>
+   @version 0.1
+   @date 15-05-2018
+   @brief Interrupt vector table.
 
-#include <irq.h>
-
-#ifdef __cplusplus
+   @detail Contains a default definition for every interrupt. Theses defaults
+   Can be overwritten by any other definition as these are all weak linked.
+*/
+#ifdef    __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif /* __cplusplus */
 
-    /// Default interrupt handler, linked against all handlers which are not
-    /// defined otherwise.
-    ///
-    /// @param  None.
-    /// @return void.
-    static void __attribute__((interrupt ("IRQ"))) __default_handler(void) {
-        while(1) {
-            __asm__("BKPT");
-        }
+/**
+   @addtogroup Vectors
+   @brief interrupt vector module.
+   @{
+ */
+
+/**
+   @brief Default interrupt handler.
+*/
+static void __Default_Handler(void)  __attribute__((interrupt ("IRQ")));
+static void __Default_Handler(void) {
+    while(1) {
+        __asm__("BKPT");
     }
-
-    /// Defines default handlers.
-    /// @param NAME     handler name.
-    /// @return
-    ///         @li     Default handler definition
-    #define default_handler(NAME)                                           \
-        void NAME ## _handler(void)
-
-    #define __def_handlr \
-        __attribute__ ((interrupt ("IRQ"), weak, alias("__default_handler")))
-
-    //-------------------------------------------------------------------------//
-    // Define all default interrupt handlers.
-    //-------------------------------------------------------------------------//
-
-    void __def_handlr handler_0x08 (void) ;
-    void __def_handlr handler_0x0C (void) ;
-    void __def_handlr handler_0x10 (void) ;
-    void __def_handlr handler_0x14 (void) ;
-    void __def_handlr handler_0x18 (void) ;
-    void __def_handlr handler_0x1C (void) ;
-    void __def_handlr handler_0x20 (void) ;
-    void __def_handlr handler_0x24 (void) ;
-    void __def_handlr handler_0x28 (void) ;
-    void __def_handlr handler_0x2C (void) ;
-    void __def_handlr handler_0x30 (void) ;
-    void __def_handlr handler_0x34 (void) ;
-    void __def_handlr handler_0x38 (void) ;
-    void __def_handlr handler_0x3C (void) ;
-    void __def_handlr handler_0x40 (void) ;
-    void __def_handlr handler_0x44 (void) ;
-    void __def_handlr handler_0x48 (void) ;
-    void __def_handlr handler_0x4C (void) ;
-    void __def_handlr handler_0x50 (void) ;
-    void __def_handlr handler_0x54 (void) ;
-    void __def_handlr handler_0x58 (void) ;
-    void __def_handlr handler_0x5C (void) ;
-    void __def_handlr handler_0x60 (void) ;
-    void __def_handlr handler_0x64 (void) ;
-    void __def_handlr handler_0x68 (void) ;
-    void __def_handlr handler_0x6C (void) ;
-    void __def_handlr handler_0x70 (void) ;
-    void __def_handlr handler_0x74 (void) ;
-    void __def_handlr handler_0x78 (void) ;
-    void __def_handlr handler_0x7C (void) ;
-    void __def_handlr handler_0x80 (void) ;
-    void __def_handlr handler_0x84 (void) ;
-    void __def_handlr handler_0x88 (void) ;
-    void __def_handlr handler_0x8C (void) ;
-    void __def_handlr handler_0x90 (void) ;
-    void __def_handlr handler_0x94 (void) ;
-    void __def_handlr handler_0x98 (void) ;
-    void __def_handlr handler_0x9C (void) ;
-    void __def_handlr handler_0xA0 (void) ;
-    void __def_handlr handler_0xA4 (void) ;
-    void __def_handlr handler_0xA8 (void) ;
-    void __def_handlr handler_0xAC (void) ;
-    void __def_handlr handler_0xB0 (void) ;
-    void __def_handlr handler_0xB4 (void) ;
-    void __def_handlr handler_0xB8 (void) ;
-    void __def_handlr handler_0xBC (void) ;
-
-    //----------------------------------------------------------------------------//
-    // Interrupt vector table.
-    //----------------------------------------------------------------------------//
-
-    // imported main stack end (from linker script)
-    extern const char __main_stack_end;
-    // import the address of Reset_Handler()
-    extern void _start(void);
-    // Vector table.
-    const volatile void * volatile vectors[] __attribute__ ((section(".vectors"))) = {
-    	(void *)&__main_stack_end,
-    	(void *)_start,
-        (void *)handler_0x08,
-        (void *)handler_0x0C,
-        (void *)handler_0x10,
-        (void *)handler_0x14,
-        (void *)handler_0x18,
-        (void *)handler_0x1C,
-        (void *)handler_0x20,
-        (void *)handler_0x24,
-        (void *)handler_0x28,
-        (void *)handler_0x2C,
-        (void *)handler_0x30,
-        (void *)handler_0x34,
-        (void *)handler_0x38,
-        (void *)handler_0x3C,
-        (void *)handler_0x40,
-        (void *)handler_0x44,
-        (void *)handler_0x48,
-        (void *)handler_0x4C,
-        (void *)handler_0x50,
-        (void *)handler_0x54,
-        (void *)handler_0x58,
-        (void *)handler_0x5C,
-        (void *)handler_0x60,
-        (void *)handler_0x64,
-        (void *)handler_0x68,
-        (void *)handler_0x6C,
-        (void *)handler_0x70,
-        (void *)handler_0x74,
-        (void *)handler_0x78,
-        (void *)handler_0x7C,
-        (void *)handler_0x80,
-        (void *)handler_0x84,
-        (void *)handler_0x88,
-        (void *)handler_0x8C,
-        (void *)handler_0x90,
-        (void *)handler_0x94,
-        (void *)handler_0x98,
-        (void *)handler_0x9C,
-        (void *)handler_0xA0,
-        (void *)handler_0xA4,
-        (void *)handler_0xA8,
-        (void *)handler_0xAC,
-        (void *)handler_0xB0,
-        (void *)handler_0xB4,
-        (void *)handler_0xB8
-    };
-
-
-#ifdef __cplusplus
 }
-#endif //__cplusplus
+
+#if defined(CORTEX_M0) || defined(CORTEX_M0_PLUS)
+
+/**
+   @addtogroup Cortex-m0
+   @ingroup    Vectors.
+   @brief      Cortex-m0 and m0+ interrupt handlers.
+   @{
+*/
+
+void NMI_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void HardFault_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x10_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x14_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x18_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x1C_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x20_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x24_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x28_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SVCall_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x30_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x34_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void PendSV_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SysTick_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+/**
+   @} End of group Cortex-m0.
+*/
+
+#elif defined(CORTEX_M3)
+
+/**
+   @addtogroup Cortex-m3
+   @ingroup    Vectors.
+   @brief      Cortex-m3 interrupt handlers.
+   @{
+*/
+
+void NMI_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void HardFault_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void MemoryManagementFault_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void BusFault_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void UsageFault_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x1C_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x20_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x24_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x28_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SVCall_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x30_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x34_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void PendSV_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SysTick_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+/**
+   @} End of group Cortex-m3.
+*/
+
+#else
+
+#error No arm core defined.
+
+#endif
+
+#if defined(STM32F0x0)
+
+/**
+   @addtogroup STM32F0x0
+   @ingroup    Vectors.
+   @brief      STM32F0x0 interrupt handlers.
+   @{
+*/
+
+void WWDG_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x44_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void RTC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void FLASH_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void RCC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI0_1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI2_3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI4_15_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x60_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA_CH1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA_CH2_3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA_CH4_5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void ADC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_BRK_UP_TRG_COM_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_CC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x7C_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM6_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x84_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0x88_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM14_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM15_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM16_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM17_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SPI1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SPI2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART3_4_5_6_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void __Reserved_0xB8_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USB_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+/**
+   @} End of group STM32F0x0.
+*/
+
+#elif defined(STM32F10xxx)
+
+/**
+   @addtogroup STM32F10xxx
+   @ingroup    Vectors.
+   @brief      STM32F10xxx interrupt handlers.
+   @{
+*/
+
+void WWDG_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void PVD_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TAMPER_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void RTC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void FLASH_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void RCC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI0_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI4_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH4_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH6_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA1_CH7_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void ADC1_2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USB_HP_CAN_TX_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USB_LP_CAN_RX0_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void CAN_RX1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void CAN_SCE_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI9_5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_BRK_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_UP_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_TRG_COM_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM1_CC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM4_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C1_EV_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C1_ER_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C2_EV_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void I2C2_ER_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SPI1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SPI2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USART3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void EXTI15_10_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void RTCAlarm_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void USBWakeup_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM8_BRK_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM8_UP_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM8_TRG_COM_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM8_CC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void ADC3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void FSMC_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SDIO_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void SPI3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void UART4_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void UART5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM6_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void TIM7_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA2_CH1_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA2_CH2_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA2_CH3_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+void DMA2_CH4_5_Handler(void)
+    __attribute__((interrupt("IRQ"), weak, alias("__Default_Handler")));
+
+/**
+   @} End of group STM32F10xxx.
+*/
+
+#else
+
+#error Chip model not defined.
+
+#endif
+
+//----------------------------------------------------------------------------//
+// Interrupt vector table.
+//----------------------------------------------------------------------------//
+
+/**
+   @brief imported main stack end (from linker script)
+*/
+extern const char __main_stack_end;
+
+/**
+   @brief import the address of Reset_Handler()
+*/
+extern void Reset_Handler(void);
+
+/**
+   @brief  Vector table.
+*/
+void (*const vectors[])(void) __attribute__ ((used, section(".vectors"))) = {
+    (void (*)(void))&__main_stack_end,
+    Reset_Handler,
+
+#if defined(CORTEX_M0) || defined(CORTEX_M0_PLUS)
+
+    NMI_Handler,
+    HardFault_Handler,
+    __Reserved_0x10_Handler,
+    __Reserved_0x14_Handler,
+    __Reserved_0x18_Handler,
+    __Reserved_0x1C_Handler,
+    __Reserved_0x20_Handler,
+    __Reserved_0x24_Handler,
+    __Reserved_0x28_Handler,
+    SVCall_Handler,
+    __Reserved_0x30_Handler,
+    __Reserved_0x34_Handler,
+    PendSV_Handler,
+    SysTick_Handler,
+
+#elif defined(CORTEX_M3)
+
+    NMI_Handler,
+    HardFault_Handler,
+    MemoryManagementFault_Handler,
+    BusFault_Handler,
+    UsageFault_Handler,
+    __Reserved_0x1C_Handler,
+    __Reserved_0x20_Handler,
+    __Reserved_0x24_Handler,
+    __Reserved_0x28_Handler,
+    SVCall_Handler,
+    __Reserved_0x30_Handler,
+    __Reserved_0x34_Handler,
+    PendSV_Handler,
+    SysTick_Handler,
+
+#endif
+
+#if defined(STM32F0x0)
+
+    WWDG_Handler,
+    __Reserved_0x44_Handler,
+        RTC_Handler,
+    FLASH_Handler,
+    RCC_Handler,
+    EXTI0_1_Handler,
+    EXTI2_3_Handler,
+    EXTI4_15_Handler,
+    __Reserved_0x60_Handler,
+    DMA_CH1_Handler,
+    DMA_CH2_3_Handler,
+    DMA_CH4_5_Handler,
+    ADC_Handler,
+    TIM1_BRK_UP_TRG_COM_Handler,
+    TIM1_CC_Handler,
+    __Reserved_0x7C_Handler,
+    TIM3_Handler,
+    TIM6_Handler,
+    __Reserved_0x84_Handler,
+    __Reserved_0x88_Handler,
+    TIM14_Handler,
+    TIM15_Handler,
+    TIM16_Handler,
+    TIM17_Handler,
+    I2C1_Handler,
+    I2C2_Handler,
+    SPI1_Handler,
+    SPI2_Handler,
+    USART1_Handler,
+    USART2_Handler,
+    USART3_4_5_6_Handler,
+    __Reserved_0xB8_Handler,
+    USB_Handler
+
+#elif defined(STM32F10xxx)
+
+    WWDG_Handler,
+    PVD_Handler,
+    TAMPER_Handler,
+    RTC_Handler,
+    FLASH_Handler,
+    RCC_Handler,
+    EXTI0_Handler,
+    EXTI1_Handler,
+    EXTI2_Handler,
+    EXTI3_Handler,
+    EXTI4_Handler,
+    DMA1_CH1_Handler,
+    DMA1_CH2_Handler,
+    DMA1_CH3_Handler,
+    DMA1_CH4_Handler,
+    DMA1_CH5_Handler,
+    DMA1_CH6_Handler,
+    DMA1_CH7_Handler,
+    ADC1_2_Handler,
+    USB_HP_CAN_TX_Handler,
+    USB_LP_CAN_RX0_Handler,
+    CAN_RX1_Handler,
+    CAN_SCE_Handler,
+    EXTI9_5_Handler,
+    TIM1_BRK_Handler,
+    TIM1_UP_Handler,
+    TIM1_TRG_COM_Handler,
+    TIM1_CC_Handler,
+    TIM2_Handler,
+    TIM3_Handler,
+    TIM4_Handler,
+    I2C1_EV_Handler,
+    I2C1_ER_Handler,
+    I2C2_EV_Handler,
+    I2C2_ER_Handler,
+    SPI1_Handler,
+    SPI2_Handler,
+    USART1_Handler,
+    USART2_Handler,
+    USART3_Handler,
+    EXTI15_10_Handler,
+    RTCAlarm_Handler,
+    USBWakeup_Handler,
+    TIM8_BRK_Handler,
+    TIM8_UP_Handler,
+    TIM8_TRG_COM_Handler,
+    TIM8_CC_Handler,
+    ADC3_Handler,
+    FSMC_Handler,
+    SDIO_Handler,
+    TIM5_Handler,
+    SPI3_Handler,
+    UART4_Handler,
+    UART5_Handler,
+    TIM6_Handler,
+    TIM7_Handler,
+    DMA2_CH1_Handler,
+    DMA2_CH2_Handler,
+    DMA2_CH3_Handler,
+    DMA2_CH4_5_Handler
+
+#endif
+
+};
+
+/**
+   @} End of group Vectors.
+ */
+
+#ifdef    __cplusplus
+}
+#endif /* __cplusplus */
